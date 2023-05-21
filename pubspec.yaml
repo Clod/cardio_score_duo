@@ -31,6 +31,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+
+  shared_preferences: ^2.1.0
+  flutter_exit_app: ^1.1.2
+  url_launcher: ^6.1.10
+
 # OJO REQUIERE UN ARCHIVO l10n.yaml en el directorio base del proyecto
 # y ejecutar  flutter gen-l10n para que se generen los archivos
   flutter_localizations:

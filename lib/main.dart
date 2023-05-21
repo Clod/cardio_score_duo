@@ -2,6 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:form_builder_validators/form_builder_validators.dart';
 import 'clod_segmented_control.dart';
 // import 'package:intl/intl.dart';
@@ -22,6 +24,9 @@ const TextStyle _textStyleIdeal = TextStyle(
   color: CupertinoColors.activeGreen,
 );
 
+SharedPreferences? prefs;
+bool? flagShowTandC = true;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -30,6 +35,14 @@ Future<void> main() async {
     DeviceOrientation.landscapeRight,
   ]);
 
+  // Obtain shared preferences.
+  prefs = await SharedPreferences.getInstance();
+
+  flagShowTandC = prefs!.getBool('showTandC');
+
+  debugPrint("Show T&C: " + flagShowTandC.toString());
+  // If I could not read it I assume T&C have not veen already accepted
+  if (flagShowTandC == null) flagShowTandC = true;
   runApp(const MyApp());
 }
 
@@ -83,6 +96,9 @@ class MyHomePageState extends State<MyHomePage> {
   Color _colorScore = CupertinoColors.black;
   bool _scoreVisible = false;
 
+  late BuildContext bc;
+  bool tcAccepted = false;
+
   _computeScore() {
     debugPrint('***************** Calculando el score *****************');
 
@@ -94,12 +110,12 @@ class MyHomePageState extends State<MyHomePage> {
         _selectedValuePresion != null &&
         _selectedValueGlucemia != null) {
       _puntaje = (double.parse(_selectedValueFuma!) +
-          double.parse(_selectedValueBMI!) +
-          double.parse(_selectedValueActiFis!) +
-          double.parse(_selectedValueDieta!) +
-          double.parse(_selectedValueColesterol!) +
-          double.parse(_selectedValuePresion!) +
-          double.parse(_selectedValueGlucemia!)) /
+              double.parse(_selectedValueBMI!) +
+              double.parse(_selectedValueActiFis!) +
+              double.parse(_selectedValueDieta!) +
+              double.parse(_selectedValueColesterol!) +
+              double.parse(_selectedValuePresion!) +
+              double.parse(_selectedValueGlucemia!)) /
           7;
       if (_puntaje == 1) {
         _score = AppLocalizations.of(context)!.ideal;
@@ -134,69 +150,17 @@ class MyHomePageState extends State<MyHomePage> {
               child: SingleChildScrollView(
                 child: Text(
                   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.'
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.'
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.'
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.'
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.'
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.'
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.'
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                      'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                      'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                      'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                      'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                      'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                      'tempor, velit eu rutrum congue, ante erat tristique justo, '
-                      'nec interdum sapien neque eu neque.',
+                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
+                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
+                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
+                  'ultrices posuere cubilia curae; Vivamus lacinia dui non '
+                  'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
+                  'nec interdum sapien neque eu neque.'
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
+                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
+                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
+                  'ultrices posuere cubilia curae; Vivamus lacinia dui non ',
                   style: TextStyle(fontSize: 12.0),
                 ),
               )),
@@ -211,6 +175,80 @@ class MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  showTandC(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'My Dialog',
+            style: TextStyle(fontSize: 14.0),
+          ),
+          content: SizedBox(
+              width: 400,
+              height: 400,
+              child: SingleChildScrollView(
+                child: Text(
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
+                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
+                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
+                  'ultrices posuere cubilia curae; Vivamus lacinia dui non '
+                  'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
+                  'nec interdum sapien neque eu neque.'
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
+                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
+                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
+                  'ultrices posuere cubilia curae; Vivamus lacinia dui non ',
+                  style: TextStyle(fontSize: 12.0),
+                ),
+              )),
+          actions: [
+            TextButton(
+              onPressed: () {
+                debugPrint("Cancelando...");
+                // Gracefully quit the app
+                // Según leí, Apple no lo permite pero esto, de alguna manera, lo logra.
+                // FlutterExitApp.exitApp(iosForceExit: true);
+                FlutterExitApp.exitApp();
+              },
+              child: Text('Reject'),
+            ),
+            TextButton(
+              onPressed: () {
+                debugPrint("Aceptando...");
+                prefs!.setBool('showTandC', false);
+                Navigator.of(context).pop();
+              },
+              child: Text('Accept'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  ////////////////////////////////////////////////////////////////
+  void myFunction() {
+    debugPrint('Widget built 1!');
+    showTandC(bc);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    debugPrint("En intiState $showTandC");
+
+    if (flagShowTandC != false) {
+      // Register a callback to execute after the widget is built
+      WidgetsBinding.instance.addPostFrameCallback((_) => myFunction());
+    }
+  }
+
+////////////////////////////////////////////////////////////////
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
@@ -218,10 +256,12 @@ class MyHomePageState extends State<MyHomePage> {
 
     final gridColumnWidth = (screenWidth - 16.0) / 4.0;
 
-    debugPrint(screenWidth.toString());
+    debugPrint('Ancho de pantalla: {screenWidth.toString()}');
 
     // Acomodo el tamaño del font de acuerdo con el ancho de la pantalla
     final fontSize = screenWidth / 50.0;
+
+    bc = context;
 
     return DefaultTextStyle(
       style: TextStyle(fontSize: fontSize),
@@ -237,8 +277,7 @@ class MyHomePageState extends State<MyHomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment
-                      .start, // los quiero tados juntitos sin espacios intermedios
+                  mainAxisAlignment: MainAxisAlignment.start, // los quiero tados juntitos sin espacios intermedios
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     AbsorbPointer(
@@ -249,35 +288,22 @@ class MyHomePageState extends State<MyHomePage> {
                           '0': Container(
                             width: gridColumnWidth,
                             child: Text(AppLocalizations.of(context)!.metric,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                                textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                           '3': Container(
                             width: gridColumnWidth,
                             child: Text(AppLocalizations.of(context)!.poor,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                                textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                           '2': Container(
                             width: gridColumnWidth,
-                            child: Text(
-                                AppLocalizations.of(context)!.intermediate,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                            child: Text(AppLocalizations.of(context)!.intermediate,
+                                textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                           '1': Container(
                             width: gridColumnWidth,
                             child: Text(AppLocalizations.of(context)!.ideal,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                                textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                         },
                         onValueChanged: (String value) {
@@ -299,9 +325,7 @@ class MyHomePageState extends State<MyHomePage> {
                             child: Text(
                               AppLocalizations.of(context)!.metricSmokingStatus,
                               textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: CupertinoColors.black),
+                              style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black),
                             ),
                           ),
                         ),
@@ -330,7 +354,6 @@ class MyHomePageState extends State<MyHomePage> {
                             ),
                             onLongPress: () {
                               debugPrint("Long pressed");
-
                               showHint(context);
                             },
                           ),
@@ -361,9 +384,7 @@ class MyHomePageState extends State<MyHomePage> {
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
                             child: Text(AppLocalizations.of(context)!.metricBMI,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                         ),
                         '3': Container(
@@ -407,19 +428,14 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(
-                                AppLocalizations.of(context)!
-                                    .metricPhysicalActivityLevel,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                            child: Text(AppLocalizations.of(context)!.metricPhysicalActivityLevel,
+                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                         ),
                         '3': Container(
                           width: gridColumnWidth,
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .poorPhysicalActivityLevel,
+                            AppLocalizations.of(context)!.poorPhysicalActivityLevel,
                             textAlign: TextAlign.center,
                             style: _textStylePobre,
                           ),
@@ -427,8 +443,7 @@ class MyHomePageState extends State<MyHomePage> {
                         '2': Container(
                           width: gridColumnWidth,
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .intermPhysicalActivityLevel,
+                            AppLocalizations.of(context)!.intermPhysicalActivityLevel,
                             textAlign: TextAlign.center,
                             style: _textStyleInterm,
                           ),
@@ -438,8 +453,7 @@ class MyHomePageState extends State<MyHomePage> {
                           child: Padding(
                             padding: EdgeInsets.all(4.0),
                             child: Text(
-                              AppLocalizations.of(context)!
-                                  .idealPhysicalActivityLevel,
+                              AppLocalizations.of(context)!.idealPhysicalActivityLevel,
                               textAlign: TextAlign.center,
                               style: _textStyleIdeal,
                             ),
@@ -462,12 +476,8 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(
-                                AppLocalizations.of(context)!
-                                    .metricHealthyDietScore,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                            child: Text(AppLocalizations.of(context)!.metricHealthyDietScore,
+                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                         ),
                         '3': Container(
@@ -481,8 +491,7 @@ class MyHomePageState extends State<MyHomePage> {
                         '2': Container(
                           width: gridColumnWidth,
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .intermHealthyDietScore,
+                            AppLocalizations.of(context)!.intermHealthyDietScore,
                             textAlign: TextAlign.center,
                             style: _textStyleInterm,
                           ),
@@ -512,12 +521,8 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(
-                                AppLocalizations.of(context)!
-                                    .metricTotalChoresterol,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                            child: Text(AppLocalizations.of(context)!.metricTotalChoresterol,
+                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                         ),
                         '3': Container(
@@ -531,8 +536,7 @@ class MyHomePageState extends State<MyHomePage> {
                         '2': Container(
                           width: gridColumnWidth,
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .intermTotalChoresterol,
+                            AppLocalizations.of(context)!.intermTotalChoresterol,
                             textAlign: TextAlign.center,
                             style: _textStyleInterm,
                           ),
@@ -542,8 +546,7 @@ class MyHomePageState extends State<MyHomePage> {
                           child: Padding(
                             padding: EdgeInsets.all(4.0),
                             child: Text(
-                              AppLocalizations.of(context)!
-                                  .idealTotalChoresterol,
+                              AppLocalizations.of(context)!.idealTotalChoresterol,
                               textAlign: TextAlign.center,
                               style: _textStyleIdeal,
                             ),
@@ -566,11 +569,8 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(
-                                AppLocalizations.of(context)!.metricBloodPressure,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                            child: Text(AppLocalizations.of(context)!.metricBloodPressure,
+                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                         ),
                         '3': Container(
@@ -617,19 +617,14 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(
-                                AppLocalizations.of(context)!
-                                    .metricFastingBloodGlucose,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: CupertinoColors.black)),
+                            child: Text(AppLocalizations.of(context)!.metricFastingBloodGlucose,
+                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
                           ),
                         ),
                         '3': Container(
                           width: gridColumnWidth,
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .poorFastingBloodGlucose,
+                            AppLocalizations.of(context)!.poorFastingBloodGlucose,
                             textAlign: TextAlign.center,
                             style: _textStylePobre,
                           ),
@@ -637,8 +632,7 @@ class MyHomePageState extends State<MyHomePage> {
                         '2': Container(
                           width: gridColumnWidth,
                           child: Text(
-                            AppLocalizations.of(context)!
-                                .intermFastingBloodGlucose,
+                            AppLocalizations.of(context)!.intermFastingBloodGlucose,
                             textAlign: TextAlign.center,
                             style: _textStyleInterm,
                           ),
@@ -648,8 +642,7 @@ class MyHomePageState extends State<MyHomePage> {
                           child: Padding(
                             padding: EdgeInsets.all(4.0),
                             child: Text(
-                              AppLocalizations.of(context)!
-                                  .idealFastingBloodGlucose,
+                              AppLocalizations.of(context)!.idealFastingBloodGlucose,
                               textAlign: TextAlign.center,
                               style: _textStyleIdeal,
                             ),
@@ -668,11 +661,9 @@ class MyHomePageState extends State<MyHomePage> {
                       children: [
                         // Puntaje
                         Padding(
-                          padding:
-                          const EdgeInsets.fromLTRB(30.0, 10.0, 10.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(30.0, 10.0, 10.0, 0.0),
                           child: Text(
-                            AppLocalizations.of(context)!.result +
-                                '${_puntaje.toStringAsFixed(1)}',
+                            AppLocalizations.of(context)!.result + '${_puntaje.toStringAsFixed(1)}',
                             style: const TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold,
@@ -682,22 +673,18 @@ class MyHomePageState extends State<MyHomePage> {
                         ),
                         // Score
                         Padding(
-                          padding:
-                          const EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(20.0, 10.0, 0.0, 0.0),
                           child: Text(
                             AppLocalizations.of(context)!.score,
                             style: TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.bold,
-                              color: _scoreVisible
-                                  ? CupertinoColors.black
-                                  : CupertinoColors.systemBackground,
+                              color: _scoreVisible ? CupertinoColors.black : CupertinoColors.systemBackground,
                             ),
                           ),
                         ),
                         Padding(
-                          padding:
-                          const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(0.0, 10.0, 10.0, 0.0),
                           child: Text(
                             _score,
                             style: TextStyle(
