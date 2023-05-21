@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 // import 'package:form_builder_validators/form_builder_validators.dart';
 import 'clod_segmented_control.dart';
 // import 'package:intl/intl.dart';
@@ -68,7 +69,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: [
         Locale('en', ''), // English
-        Locale('es', ''), // Spanish
+        // Locale('es', ''), // Spanish
       ],
       home: MyHomePage(),
     );
@@ -135,13 +136,13 @@ class MyHomePageState extends State<MyHomePage> {
     debugPrint('Puntaje: $_puntaje');
   }
 
-  showHint(BuildContext context) {
+  showHint(BuildContext context, String title, String body) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'My Dialog',
+            title,
             style: TextStyle(fontSize: 14.0),
           ),
           content: SizedBox(
@@ -149,18 +150,7 @@ class MyHomePageState extends State<MyHomePage> {
               height: 400,
               child: SingleChildScrollView(
                 child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                  'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                  'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                  'nec interdum sapien neque eu neque.'
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                  'ultrices posuere cubilia curae; Vivamus lacinia dui non ',
+                  body,
                   style: TextStyle(fontSize: 12.0),
                 ),
               )),
@@ -256,10 +246,10 @@ class MyHomePageState extends State<MyHomePage> {
 
     final gridColumnWidth = (screenWidth - 16.0) / 4.0;
 
-    debugPrint('Ancho de pantalla: {screenWidth.toString()}');
+    debugPrint('Ancho de pantalla: ${screenWidth.toString()}');
 
     // Acomodo el tamaño del font de acuerdo con el ancho de la pantalla
-    final fontSize = screenWidth / 50.0;
+    final fontSize = screenWidth / 75.0;
 
     bc = context;
 
@@ -276,6 +266,18 @@ class MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                GestureDetector(
+                  onTap: () async {
+                    await launchUrl(Uri.parse('https://playbook.heart.org/lifes-simple-7/'));
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.txtFundamentalsLocation,
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start, // los quiero tados juntitos sin espacios intermedios
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -331,31 +333,18 @@ class MyHomePageState extends State<MyHomePage> {
                         ),
                         '3': Container(
                           width: gridColumnWidth,
-                          child: GestureDetector(
-                            child: Text(
-                              AppLocalizations.of(context)!.poorSmokingStatus,
-                              textAlign: TextAlign.center,
-                              style: _textStylePobre,
-                            ),
-                            onLongPress: () {
-                              debugPrint("Long pressed");
-
-                              showHint(context);
-                            },
+                          child: Text(
+                            AppLocalizations.of(context)!.poorSmokingStatus,
+                            textAlign: TextAlign.center,
+                            style: _textStylePobre,
                           ),
                         ),
                         '2': Container(
                           width: gridColumnWidth,
-                          child: GestureDetector(
-                            child: Text(
-                              AppLocalizations.of(context)!.intermSmokingStatus,
-                              textAlign: TextAlign.center,
-                              style: _textStyleInterm,
-                            ),
-                            onLongPress: () {
-                              debugPrint("Long pressed");
-                              showHint(context);
-                            },
+                          child: Text(
+                            AppLocalizations.of(context)!.intermSmokingStatus,
+                            textAlign: TextAlign.center,
+                            style: _textStyleInterm,
                           ),
                         ),
                         '1': Container(
@@ -383,8 +372,15 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(AppLocalizations.of(context)!.metricBMI,
-                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
+                            child: GestureDetector(
+                              child: Text(AppLocalizations.of(context)!.metricBMI,
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
+                              onLongPress: () {
+                                debugPrint("Long pressed");
+                                showHint(context, "Body Mass Index",
+                                    "Represents appropriate energy balance (i.e., appropriate dietary quantity and PA to maintain normal body weight).");
+                              },
+                            ),
                           ),
                         ),
                         '3': Container(
@@ -476,8 +472,15 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(AppLocalizations.of(context)!.metricHealthyDietScore,
-                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
+                            child: GestureDetector(
+                              child: Text(AppLocalizations.of(context)!.metricHealthyDietScore,
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
+                              onLongPress: () {
+                                debugPrint("Long pressed");
+                                showHint(context, "Healthy diet pattern",
+                                    "In the context of a healthy dietary pattern that is consistent with a Dietary Approaches to Stop Hypertension (DASH)–type eating pattern, to consume ≥4.5 cups/d of fruits and vegetables, ≥2 servings/wk of fish, and ≥3 servings/d of whole grains and no more than 36 oz/wk of sugar-sweetened beverages and 1500 mg/d of sodium.");
+                              },
+                            ),
                           ),
                         ),
                         '3': Container(
@@ -655,6 +658,27 @@ class MyHomePageState extends State<MyHomePage> {
                         });
                         _computeScore();
                       },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.detailIndicator,
+                          style: const TextStyle(
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.bold,
+                            color: CupertinoColors.black,
+                          ),
+                        ),
+                        Text(
+                          " BMI, body mass index; DBP, diastolic blood pressure; PA, physical activity; and SBP, systolic blood pressure",
+                          style: const TextStyle(
+                            fontSize: 10.0,
+                            fontWeight: FontWeight.bold,
+                            color: CupertinoColors.black,
+                          ),
+                        )
+                      ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
