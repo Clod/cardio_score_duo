@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="cardio_score_duo"
+        android:label="Cardio Score"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

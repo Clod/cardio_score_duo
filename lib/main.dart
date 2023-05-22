@@ -143,7 +143,7 @@ class MyHomePageState extends State<MyHomePage> {
         return AlertDialog(
           title: Text(
             title,
-            style: TextStyle(fontSize: 14.0),
+            style: TextStyle(fontSize: 16.0),
           ),
           content: SizedBox(
               width: 400,
@@ -151,7 +151,7 @@ class MyHomePageState extends State<MyHomePage> {
               child: SingleChildScrollView(
                 child: Text(
                   body,
-                  style: TextStyle(fontSize: 12.0),
+                  style: TextStyle(fontSize: 14.0),
                 ),
               )),
           actions: [
@@ -172,27 +172,69 @@ class MyHomePageState extends State<MyHomePage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            'My Dialog',
-            style: TextStyle(fontSize: 14.0),
+            AppLocalizations.of(context)!.txtImportantNotice,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.deepOrange,
+                fontSize: 14.0,
+                fontWeight: FontWeight.bold),
           ),
           content: SizedBox(
               width: 400,
               height: 400,
               child: SingleChildScrollView(
-                child: Text(
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                  'ultrices posuere cubilia curae; Vivamus lacinia dui non '
-                  'magna tincidunt, vel imperdiet nisl tincidunt. Donec '
-                  'nec interdum sapien neque eu neque.'
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                  'Sed euismod, nulla a feugiat pulvinar, velit turpis dapibus '
-                  'nibh, at varius velit tellus vel nunc. Nulla facilisi. '
-                  'Vestibulum ante ipsum primis in faucibus orci luctus et '
-                  'ultrices posuere cubilia curae; Vivamus lacinia dui non ',
-                  style: TextStyle(fontSize: 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.txtReadCarefully,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.txtAppPurpose,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await launchUrl(Uri.parse('https://www.heart.org'));
+                      },
+                      child: Text(
+                        'American Heart Association',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.txtFundamentalsLocation,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await launchUrl(Uri.parse('https://playbook.heart.org/lifes-simple-7/'));
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.txtLifeSimple7Objective,
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )),
           actions: [
@@ -263,7 +305,7 @@ class MyHomePageState extends State<MyHomePage> {
           child: Container(
             margin: EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GestureDetector(
@@ -277,6 +319,9 @@ class MyHomePageState extends State<MyHomePage> {
                       color: Colors.blue,
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: fontSize / 2,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start, // los quiero tados juntitos sin espacios intermedios
@@ -424,8 +469,21 @@ class MyHomePageState extends State<MyHomePage> {
                           width: gridColumnWidth,
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(6.0, 0, 0, 0),
-                            child: Text(AppLocalizations.of(context)!.metricPhysicalActivityLevel,
-                                style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
+                            child: GestureDetector(
+                              child: Text(AppLocalizations.of(context)!.metricPhysicalActivityLevel,
+                                  style: TextStyle(fontWeight: FontWeight.bold, color: CupertinoColors.black)),
+                              onLongPress: () {
+                                debugPrint("Long pressed");
+                                showHint(
+                                  context,
+                                  "Physical Activity",
+                                  'Proposed questions to assess PA: \n'
+                                      '(1) “On average, how many days per week do you engage in moderate to strenuous exercise (like a brisk walk)?”\n'
+                                      '(2) “On average, how many minutes do you engage in exercise at this level?” \n'
+                                      'Other options for assessing PA available.',
+                                );
+                              },
+                            ),
                           ),
                         ),
                         '3': Container(
@@ -689,7 +747,7 @@ class MyHomePageState extends State<MyHomePage> {
                           child: Text(
                             AppLocalizations.of(context)!.result + '${_puntaje.toStringAsFixed(1)}',
                             style: const TextStyle(
-                              fontSize: 18.0,
+                              fontSize: 15.0,
                               fontWeight: FontWeight.bold,
                               color: CupertinoColors.black,
                             ),
@@ -712,7 +770,7 @@ class MyHomePageState extends State<MyHomePage> {
                           child: Text(
                             _score,
                             style: TextStyle(
-                              fontSize: 18.0,
+                              fontSize: 15.0,
                               fontWeight: FontWeight.bold,
                               color: _colorScore,
                             ),
